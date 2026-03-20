@@ -11,12 +11,12 @@ export const WEEK_PLANS: WeekPlan[] = [
     resources: [
       {
         name: "Claude Code in Action",
-        url: "https://learn.deeplearning.ai/courses/claude-code-in-action",
+        url: "https://anthropic.skilljar.com/claude-code-in-action",
         category: "course",
       },
       {
         name: "Claude 101",
-        url: "https://learn.deeplearning.ai/courses/claude-101",
+        url: "https://anthropic.skilljar.com/claude-101",
         category: "course",
       },
       {
@@ -66,12 +66,12 @@ export const WEEK_PLANS: WeekPlan[] = [
     resources: [
       {
         name: "Building with the Claude API",
-        url: "https://learn.deeplearning.ai/courses/building-with-claude-api",
+        url: "https://anthropic.skilljar.com/claude-with-the-anthropic-api",
         category: "course",
       },
       {
         name: "Tool Use Documentation",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/tool-use",
+        url: "https://platform.claude.com/docs/en/build-with-claude/tool-use",
         category: "docs",
       },
       {
@@ -96,12 +96,12 @@ export const WEEK_PLANS: WeekPlan[] = [
     resources: [
       {
         name: "Prompt Caching",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
+        url: "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
         category: "docs",
       },
       {
         name: "Extended Thinking",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking",
+        url: "https://platform.claude.com/docs/en/build-with-claude/extended-thinking",
         category: "docs",
       },
       {
@@ -128,7 +128,7 @@ export const WEEK_PLANS: WeekPlan[] = [
     resources: [
       {
         name: "Intro to MCP",
-        url: "https://learn.deeplearning.ai/courses/intro-to-mcp",
+        url: "https://learn.deeplearning.ai/courses/mcp-build-rich-context-ai-apps-with-anthropic",
         category: "course",
       },
       {
@@ -157,9 +157,9 @@ export const WEEK_PLANS: WeekPlan[] = [
     milestone: "小規模MCPサーバーを1つ構築・動作確認",
     resources: [
       {
-        name: "MCP Advanced Topics",
-        url: "https://learn.deeplearning.ai/courses/mcp-advanced-topics",
-        category: "course",
+        name: "MCP Documentation",
+        url: "https://modelcontextprotocol.io/docs",
+        category: "docs",
       },
       {
         name: "MCP Servers Registry",
@@ -207,13 +207,13 @@ export const WEEK_PLANS: WeekPlan[] = [
     milestone: "3層CLAUDE.md + Hooks + Skills + Subagentを自プロジェクトに実装",
     resources: [
       {
-        name: "Claude Code Actions",
-        url: "https://docs.anthropic.com/en/docs/claude-code/actions",
+        name: "Claude Code Overview",
+        url: "https://code.claude.com/docs/en/overview",
         category: "docs",
       },
       {
         name: "Multi-agent Patterns",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/multi-agent",
+        url: "https://platform.claude.com/docs/en/agent-sdk/subagents",
         category: "docs",
       },
     ],
@@ -233,12 +233,12 @@ export const WEEK_PLANS: WeekPlan[] = [
     resources: [
       {
         name: "Claude Agent SDK",
-        url: "https://docs.anthropic.com/en/docs/agents",
+        url: "https://platform.claude.com/docs/en/agent-sdk/overview",
         category: "docs",
       },
       {
         name: "Multi-agent Orchestration",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/multi-agent",
+        url: "https://platform.claude.com/docs/en/agent-sdk/subagents",
         category: "docs",
       },
     ],
@@ -285,12 +285,12 @@ export const WEEK_PLANS: WeekPlan[] = [
     resources: [
       {
         name: "Structured Output Documentation",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/structured-output",
+        url: "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
         category: "docs",
       },
       {
         name: "Context Window Management",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/context-window",
+        url: "https://platform.claude.com/docs/en/build-with-claude/token-counting",
         category: "docs",
       },
     ],
@@ -310,12 +310,12 @@ export const WEEK_PLANS: WeekPlan[] = [
     resources: [
       {
         name: "Prompt Engineering Guide",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering",
+        url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview",
         category: "docs",
       },
       {
-        name: "Model Reliability Patterns",
-        url: "https://docs.anthropic.com/en/docs/build-with-claude/reliability",
+        name: "Error Handling & Reliability",
+        url: "https://platform.claude.com/docs/en/build-with-claude/error-handling",
         category: "docs",
       },
     ],
