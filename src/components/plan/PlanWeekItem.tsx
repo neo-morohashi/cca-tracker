@@ -1,7 +1,10 @@
 "use client";
 
-import { ChevronDown, CheckCircle2, ExternalLink, BookOpen, FileText, Github, Target, Users, type LucideIcon } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, CheckCircle2, CheckSquare, Square, ExternalLink, BookOpen, FileText, Github, Target, Users, Pencil, X, Plus, RotateCcw, type LucideIcon } from "lucide-react";
 import { DOMAINS } from "@/lib/constants";
+import { useWeekTasks } from "@/hooks/useWeekTasks";
+import { useTaskChecks } from "@/hooks/useTaskChecks";
 import type { WeekPlan, ResourceLink } from "@/lib/types";
 
 interface Props {
@@ -21,6 +24,25 @@ const RESOURCE_ICON: Record<ResourceLink["category"], LucideIcon> = {
 };
 
 export function PlanWeekItem({ plan, isOpen, isCurrentWeek, isCompleted, onToggle }: Props) {
+  const { tasks, isCustomized, saveTasks, resetTasks } = useWeekTasks(plan.week);
+  const { isChecked, toggle } = useTaskChecks();
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<string[]>([]);
+
+  function startEdit() {
+    setDraft([...tasks]);
+    setEditing(true);
+  }
+
+  function handleSave() {
+    saveTasks(draft.filter((t) => t.trim() !== ""));
+    setEditing(false);
+  }
+
+  function handleCancel() {
+    setEditing(false);
+  }
+
   return (
     <div className={`rounded-xl border overflow-hidden transition-colors ${
       isCurrentWeek ? "border-violet-500/50 bg-violet-500/5" : "border-slate-700 bg-slate-900"
@@ -58,15 +80,73 @@ export function PlanWeekItem({ plan, isOpen, isCurrentWeek, isCompleted, onToggl
           </div>
 
           <div>
-            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">タスク</p>
-            <div className="space-y-1">
-              {plan.tasks.map((task, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <span className="text-slate-600 mt-0.5 shrink-0">·</span>
-                  <span className="text-xs text-slate-300 leading-relaxed">{task}</span>
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">
+                タスク
+                {isCustomized && <span className="ml-1.5 text-violet-400">✎</span>}
+              </p>
+              {!editing ? (
+                <div className="flex items-center gap-1">
+                  {isCustomized && (
+                    <button onClick={resetTasks} className="p-1 rounded text-slate-600 hover:text-slate-400 transition-colors" title="デフォルトに戻す">
+                      <RotateCcw size={11} />
+                    </button>
+                  )}
+                  <button onClick={startEdit} className="p-1 rounded text-slate-600 hover:text-violet-400 transition-colors" title="編集">
+                    <Pencil size={11} />
+                  </button>
                 </div>
-              ))}
+              ) : (
+                <div className="flex items-center gap-1">
+                  <button onClick={handleCancel} className="text-[10px] px-2 py-0.5 rounded bg-slate-700 text-slate-300 hover:bg-slate-600">取消</button>
+                  <button onClick={handleSave} className="text-[10px] px-2 py-0.5 rounded bg-violet-600 text-white hover:bg-violet-500">保存</button>
+                </div>
+              )}
             </div>
+
+            {!editing ? (
+              <div className="space-y-1">
+                {tasks.map((task, i) => {
+                  const done = isChecked(plan.week, i);
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => toggle(plan.week, i)}
+                      className="flex items-start gap-2 w-full text-left group"
+                    >
+                      {done
+                        ? <CheckSquare size={13} className="text-emerald-400 mt-0.5 shrink-0" />
+                        : <Square size={13} className="text-slate-600 mt-0.5 shrink-0 group-hover:text-slate-400 transition-colors" />
+                      }
+                      <span className={`text-xs leading-relaxed transition-colors ${done ? "text-slate-500 line-through" : "text-slate-300"}`}>
+                        {task}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                {draft.map((task, i) => (
+                  <div key={i} className="flex items-center gap-1.5">
+                    <input
+                      value={task}
+                      onChange={(e) => setDraft((d) => d.map((t, j) => j === i ? e.target.value : t))}
+                      className="flex-1 rounded bg-slate-800 border border-slate-600 text-xs text-slate-100 px-2 py-1 focus:outline-none focus:border-violet-500"
+                    />
+                    <button onClick={() => setDraft((d) => d.filter((_, j) => j !== i))} className="p-1 text-slate-600 hover:text-red-400 transition-colors shrink-0">
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={() => setDraft((d) => [...d, ""])}
+                  className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-violet-400 transition-colors mt-1"
+                >
+                  <Plus size={11} />タスクを追加
+                </button>
+              </div>
+            )}
           </div>
 
           <div>

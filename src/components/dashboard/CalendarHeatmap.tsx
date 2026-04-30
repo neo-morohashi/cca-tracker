@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useCurrentWeek } from "@/hooks/useCurrentWeek";
 import { useStudyLogs } from "@/hooks/useStudyLogs";
 import { HEATMAP_COLORS } from "@/lib/constants";
 import { STORAGE_KEYS } from "@/lib/types";
@@ -36,6 +38,7 @@ function heatColor(minutes: number, isFuture: boolean): string {
 
 export function CalendarHeatmap() {
   const [settings] = useLocalStorage<AppSettings>(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
+  const { currentWeek } = useCurrentWeek(settings.startDate || today);
   const { logs } = useStudyLogs();
 
   const startDate = settings.startDate || today;
@@ -104,11 +107,25 @@ export function CalendarHeatmap() {
 
           {/* 週番号ラベル */}
           <div className="flex mt-1.5" style={{ paddingLeft: "22px", gap: "2px" }}>
-            {Array.from({ length: 16 }, (_, i) => (
-              <div key={i} className="flex-1 text-[9px] text-slate-700 text-center">
-                {i + 1}
-              </div>
-            ))}
+            {Array.from({ length: 16 }, (_, i) => {
+              const week = i + 1;
+              const isAccessible = week <= currentWeek;
+              return isAccessible ? (
+                <Link
+                  key={i}
+                  href={`/review?week=${week}`}
+                  className={`flex-1 text-[9px] text-center transition-colors hover:text-violet-400 ${
+                    week === currentWeek ? "text-violet-500 font-bold" : "text-slate-500"
+                  }`}
+                >
+                  {week}
+                </Link>
+              ) : (
+                <div key={i} className="flex-1 text-[9px] text-slate-700 text-center">
+                  {week}
+                </div>
+              );
+            })}
           </div>
 
         </div>

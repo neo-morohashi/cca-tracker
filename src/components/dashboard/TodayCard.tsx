@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ExternalLink, BookOpen, FileText, Github, Target, Users, CheckSquare, Square, type LucideIcon } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useCurrentWeek } from "@/hooks/useCurrentWeek";
+import { useWeekTasks } from "@/hooks/useWeekTasks";
+import { useTaskChecks } from "@/hooks/useTaskChecks";
 import { WEEK_PLANS } from "@/lib/plan-data";
 import { DOMAINS } from "@/lib/constants";
 import { STORAGE_KEYS } from "@/lib/types";
@@ -26,26 +28,13 @@ const RESOURCE_ICON: Record<ResourceLink["category"], LucideIcon> = {
   community: Users,
 };
 
-// チェック済みタスクを "week:index" のセットとして保存
-const TASK_CHECKS_KEY = "cca-tracker:task-checks";
-
 export function TodayCard() {
   const [settings] = useLocalStorage<AppSettings>(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
   const { currentWeek } = useCurrentWeek(settings.startDate || today);
-  const [checked, setChecked] = useLocalStorage<string[]>(TASK_CHECKS_KEY, []);
+  const { tasks } = useWeekTasks(currentWeek);
+  const { isChecked, toggle } = useTaskChecks();
 
   const plan = WEEK_PLANS.find((p) => p.week === currentWeek) ?? WEEK_PLANS[0];
-
-  function toggleTask(week: number, index: number) {
-    const key = `${week}:${index}`;
-    setChecked((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
-    );
-  }
-
-  function isChecked(week: number, index: number) {
-    return checked.includes(`${week}:${index}`);
-  }
 
   return (
     <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
@@ -78,15 +67,15 @@ export function TodayCard() {
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold text-slate-400">今週のタスク</p>
             <span className="text-[10px] text-slate-500">
-              {plan.tasks.filter((_, i) => isChecked(plan.week, i)).length}/{plan.tasks.length}
+              {tasks.filter((_, i) => isChecked(plan.week, i)).length}/{tasks.length}
             </span>
           </div>
-          {plan.tasks.map((task, i) => {
+          {tasks.map((task, i) => {
             const done = isChecked(plan.week, i);
             return (
               <button
                 key={i}
-                onClick={() => toggleTask(plan.week, i)}
+                onClick={() => toggle(plan.week, i)}
                 className="flex items-start gap-2 w-full text-left group"
               >
                 {done

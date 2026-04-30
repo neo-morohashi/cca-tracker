@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { WeeklyReviewForm } from "@/components/review/WeeklyReviewForm";
 
 export default function ReviewPage() {
@@ -7,7 +8,9 @@ export default function ReviewPage() {
         <h1 className="text-xl font-bold text-slate-100">週間レビュー</h1>
         <p className="text-sm text-slate-400">今週の学習を振り返ろう</p>
       </div>
-      <WeeklyReviewForm />
+      <Suspense>
+        <WeeklyReviewForm />
+      </Suspense>
     </div>
   );
 }

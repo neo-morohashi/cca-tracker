@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useWeeklyReviews } from "@/hooks/useWeeklyReviews";
 import { useStudyLogs } from "@/hooks/useStudyLogs";
 import { useCurrentWeek } from "@/hooks/useCurrentWeek";
@@ -17,11 +17,15 @@ const DEFAULT_CONF = Object.fromEntries(DOMAIN_IDS.map((id) => [id, 0])) as Reco
 
 export function WeeklyReviewForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [settings] = useLocalStorage<AppSettings>(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
   const { currentWeek } = useCurrentWeek(settings.startDate || today);
   const { getLogsByWeek } = useStudyLogs();
   const { reviews, saveReview } = useWeeklyReviews();
 
+  const weekParam = parseInt(searchParams.get("week") ?? "", 10);
+  const initialWeek = !isNaN(weekParam) && weekParam >= 1 && weekParam <= currentWeek ? weekParam : currentWeek;
+  const [selectedWeek, setSelectedWeek] = useState(initialWeek);
   const [milestoneMet, setMilestoneMet] = useState(false);
   const [confidence, setConfidence] = useState<Record<DomainId, number>>(DEFAULT_CONF);
   const [reflection, setReflection] = useState("");
@@ -29,16 +33,22 @@ export function WeeklyReviewForm() {
 
   // localStorageハイドレーション後に既存レビューを反映
   useEffect(() => {
-    const r = reviews[currentWeek];
-    if (!r) return;
+    const r = reviews[selectedWeek];
+    if (!r) {
+      setMilestoneMet(false);
+      setConfidence(DEFAULT_CONF);
+      setReflection("");
+      setNextWeekFocus("");
+      return;
+    }
     setMilestoneMet(r.milestoneMet);
     setConfidence(r.domainConfidence);
     setReflection(r.reflection);
     setNextWeekFocus(r.nextWeekFocus);
-  }, [reviews, currentWeek]);
+  }, [reviews, selectedWeek]);
 
-  const weekLogs = getLogsByWeek(currentWeek);
-  const prevLogs = getLogsByWeek(currentWeek - 1);
+  const weekLogs = getLogsByWeek(selectedWeek);
+  const prevLogs = getLogsByWeek(selectedWeek - 1);
 
   const totalMins = useMemo(() => weekLogs.reduce((s, l) => s + l.durationMinutes, 0), [weekLogs]);
   const prevMins  = useMemo(() => prevLogs.reduce((s, l) => s + l.durationMinutes, 0), [prevLogs]);
@@ -56,15 +66,46 @@ export function WeeklyReviewForm() {
   [weekLogs]);
 
   function handleSave() {
-    saveReview({ week: currentWeek, completed: true, milestoneMet, reflection, nextWeekFocus, domainConfidence: confidence });
+    saveReview({ week: selectedWeek, completed: true, milestoneMet, reflection, nextWeekFocus, domainConfidence: confidence });
     router.push("/");
   }
 
   return (
     <div className="space-y-4 p-4">
 
+      {/* 週セレクター */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => {
+            const w = Math.max(1, selectedWeek - 1);
+            setSelectedWeek(w);
+            router.replace(`/review?week=${w}`);
+          }}
+          disabled={selectedWeek <= 1}
+          className="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 font-bold disabled:opacity-30 hover:bg-slate-700 transition-colors flex items-center justify-center text-lg"
+        >‹</button>
+        <div className="flex-1 text-center">
+          <span className="text-sm font-semibold text-slate-100">Week {selectedWeek}</span>
+          {selectedWeek === currentWeek && (
+            <span className="ml-2 text-[10px] text-violet-400 font-medium">現在週</span>
+          )}
+          {reviews[selectedWeek]?.completed && (
+            <span className="ml-2 text-[10px] text-emerald-400 font-medium">✓ 完了済み</span>
+          )}
+        </div>
+        <button
+          onClick={() => {
+            const w = Math.min(currentWeek, selectedWeek + 1);
+            setSelectedWeek(w);
+            router.replace(`/review?week=${w}`);
+          }}
+          disabled={selectedWeek >= currentWeek}
+          className="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 font-bold disabled:opacity-30 hover:bg-slate-700 transition-colors flex items-center justify-center text-lg"
+        >›</button>
+      </div>
+
       <WeekSummaryCard
-        week={currentWeek}
+        week={selectedWeek}
         totalMins={totalMins}
         prevMins={prevMins}
         domainMins={domainMins}

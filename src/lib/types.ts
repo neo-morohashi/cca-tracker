@@ -62,4 +62,6 @@ export const STORAGE_KEYS = {
   LOGS: "cca-tracker:logs",
   REVIEWS: "cca-tracker:reviews",
   SETTINGS: "cca-tracker:settings",
+  CUSTOM_TASKS: "cca-tracker:custom-tasks",
+  TASK_CHECKS: "cca-tracker:task-checks",
 } as const;
