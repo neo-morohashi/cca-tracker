@@ -3,8 +3,8 @@
 import { useLocalStorage } from "./useLocalStorage";
 import { WEEK_PLANS } from "@/lib/plan-data";
 import { STORAGE_KEYS } from "@/lib/types";
+import type { LocalizedString } from "@/lib/i18n";
 
-// week番号 → カスタムタスク配列。未設定の週はデフォルトを使用。
 type CustomTasks = Record<number, string[]>;
 
 export function useWeekTasks(week: number) {
@@ -13,8 +13,8 @@ export function useWeekTasks(week: number) {
     {}
   );
 
-  const defaultTasks = WEEK_PLANS.find((p) => p.week === week)?.tasks ?? [];
-  const tasks = customTasks[week] ?? defaultTasks;
+  const defaultTasks: LocalizedString[] = WEEK_PLANS.find((p) => p.week === week)?.tasks ?? [];
+  const tasks: Array<string | LocalizedString> = customTasks[week] ?? defaultTasks;
   const isCustomized = week in customTasks;
 
   function saveTasks(newTasks: string[]) {

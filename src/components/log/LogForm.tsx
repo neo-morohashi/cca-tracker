@@ -107,7 +107,7 @@ export function LogForm() {
             <button key={d} type="button" onClick={() => setDomain(d)}
               className={`${CHIP_BASE} ${domain === d ? DOMAIN_ACTIVE[d] : CHIP_IDLE}`}
             >
-              {d === "General" ? "General" : `${d} ${DOMAINS[d].nameJa}`}
+              {d === "General" ? "General" : `${d} ${DOMAINS[d].name}`}
             </button>
           ))}
         </div>
@@ -120,7 +120,7 @@ export function LogForm() {
             <button key={type} type="button" onClick={() => setActivityType(type)}
               className={`${CHIP_BASE} ${activityType === type ? CHIP_ACTIVE_DEFAULT : CHIP_IDLE}`}
             >
-              {ACTIVITY_TYPES[type].labelJa}
+              {ACTIVITY_TYPES[type].label.en}
             </button>
           ))}
         </div>

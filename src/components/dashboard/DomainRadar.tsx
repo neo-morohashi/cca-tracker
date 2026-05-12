@@ -111,7 +111,7 @@ export function DomainRadar() {
           <div key={id} className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: DOMAINS[id].colorHex }} />
             <span className="text-[10px] text-slate-400">
-              {id} <span className="text-slate-600">{DOMAINS[id].nameJa}</span>
+              {id} <span className="text-slate-600">{DOMAINS[id].name}</span>
             </span>
           </div>
         ))}

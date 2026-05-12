@@ -28,7 +28,7 @@ export function ActivityMix() {
 
   const data = (Object.keys(ACTIVITY_TYPES) as ActivityType[]).map((type) => ({
     type,
-    name: ACTIVITY_TYPES[type].labelJa,
+    name: ACTIVITY_TYPES[type].label.en,
     value: allLogs.filter((l) => l.activityType === type).reduce((s, l) => s + l.durationMinutes, 0),
     color: ACTIVITY_COLORS[type],
   })).filter((d) => d.value > 0);

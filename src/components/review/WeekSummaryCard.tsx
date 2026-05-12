@@ -64,7 +64,7 @@ export function WeekSummaryCard({ week, totalMins, prevMins, domainMins, activit
             .filter((t) => activityMins[t] > 0)
             .map((type) => (
               <span key={type} className="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-400">
-                {ACTIVITY_TYPES[type].labelJa} {activityMins[type]}分
+                {ACTIVITY_TYPES[type].label.en} {activityMins[type]}分
               </span>
             ))}
         </div>
