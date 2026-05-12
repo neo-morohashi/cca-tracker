@@ -61,7 +61,7 @@ export function ConfidenceTrend() {
                 key={id}
                 type="monotone"
                 dataKey={id}
-                name={`${id} ${DOMAINS[id].nameJa}`}
+                name={`${id} ${DOMAINS[id].name}`}
                 stroke={DOMAINS[id].colorHex}
                 strokeWidth={2}
                 dot={{ r: 3, fill: DOMAINS[id].colorHex, strokeWidth: 0 }}

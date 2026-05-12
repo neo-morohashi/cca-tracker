@@ -17,8 +17,8 @@ export function DomainBreakdown() {
 
   const data = DOMAIN_IDS.map((id) => ({
     id,
-    name: DOMAINS[id].nameJa,
-    label: `${id} ${DOMAINS[id].nameJa}`,
+    name: DOMAINS[id].name,
+    label: `${id} ${DOMAINS[id].name}`,
     value: getLogsByDomain(id).reduce((s, l) => s + l.durationMinutes, 0),
     color: DOMAINS[id].colorHex,
   })).filter((d) => d.value > 0);

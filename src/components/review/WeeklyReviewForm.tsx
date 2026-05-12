@@ -137,7 +137,7 @@ export function WeeklyReviewForm() {
           {DOMAIN_IDS.map((id) => (
             <div key={id} className="flex items-center gap-2">
               <span className="text-xs font-bold w-6 shrink-0" style={{ color: DOMAINS[id].colorHex }}>{id}</span>
-              <span className="text-[11px] text-slate-400 flex-1 truncate">{DOMAINS[id].nameJa}</span>
+              <span className="text-[11px] text-slate-400 flex-1 truncate">{DOMAINS[id].name}</span>
               <div className="flex gap-1 shrink-0">
                 {[1, 2, 3, 4, 5].map((n) => (
                   <button key={n} type="button"
